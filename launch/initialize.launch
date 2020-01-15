@@ -17,9 +17,11 @@
 
   <!-- spwan ur5 -->
   <!-- send robot urdf to param server -->
-  <include file="$(find ur_description)/launch/ur5_upload.launch">
+  <!-- <include file="$(find ur_description)/launch/ur5_upload.launch">
     <arg name="limited" value="$(arg limited)"/>
-  </include>
+  </include> -->
+  <arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find ur5_notebook)/urdf/ur5_scene.urdf.xacro' transmission_hw_interface:=$(arg transmission_hw_interface)" />
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 0.2 -y 0.7" respawn="false" output="screen" />

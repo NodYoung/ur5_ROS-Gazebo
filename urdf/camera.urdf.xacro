@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="ur_arm_camera">
+    <joint name="camera_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <origin xyz="-0.02 0.0 0.055" rpy="0 0 0"/>
+      <parent link="ee_link"/>
+      <child link="camera_link"/>
+    </joint>
+    <link name="camera_link">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+  	<box size="0.02 0.02 0.02"/>
+        </geometry>
+      </collision>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+  	<box size="0.02 0.02 0.02"/>
+        </geometry>
+        <material name="green"/>
+      </visual>
+      <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+  
+    <!-- generate an optical frame http://www.ros.org/reps/rep-0103.html#suffix-frames
+        so that ros and opencv can operate on the camera frame correctly -->
+    <joint name="camera_optical_joint" type="fixed">
+      <!-- these values have to be these values otherwise the gazebo camera image
+          won't be aligned properly with the frame it is supposedly originating from -->
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+      <parent link="camera_link"/>
+      <child link="camera_link_optical"/>
+    </joint>
+    <link name="camera_link_optical">
+    </link>
+  </xacro:macro>
+</robot>
